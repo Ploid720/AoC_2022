@@ -1,6 +1,6 @@
 object Puzzle1
 {
-    def main(args: Array[String])
+    def main(args: Array[String]): Unit =
     {
         //Basic iteration through each case
         // println(io.Source
@@ -9,13 +9,11 @@ object Puzzle1
         //     .toList
         //     .map(s => s.trim)
         //     .filter(s => !s.isEmpty)
-        //     .map(s => s.split(" ") match
-        //     {
+        //     .map(s => s.split(" ") match {
         //         case Array(oppMov, myMov) => (oppMov, myMov)
         //         case _ => throw new IllegalArgumentException
         //     })
-        //     .map(_ match
-        //     {
+        //     .map(_ match {
         //         case ("A", "X") => 3 + 1
         //         case ("A", "Y") => 6 + 2
         //         case ("A", "Z") => 0 + 3
@@ -25,6 +23,7 @@ object Puzzle1
         //         case ("C", "X") => 6 + 1
         //         case ("C", "Y") => 0 + 2
         //         case ("C", "Z") => 3 + 3
+        //         case _ => throw new IllegalArgumentException
         //     })
         //     .sum)
 
@@ -37,22 +36,21 @@ object Puzzle1
             .toList
             .map(s => s.trim)
             .filter(s => !s.isEmpty)
-            .map(s => s.split(" ") match
-            {
+            .map(s => s.split(" ") match {
                 case Array(oppMov, myMov) => (oppMov, myMov)
                 case _ => throw new IllegalArgumentException
             })
-            .map(_ match
-            {
+            .map(_ match {
                 case ("A", myMov) => (1, myMov)
                 case ("B", myMov) => (0, myMov)
                 case ("C", myMov) => (2, myMov)
+                case _ => throw new IllegalArgumentException
             })
-            .map(_ match
-            {
+            .map(_ match {
                 case (oppMvInd, "X") => 1 + matchScores(oppMvInd + 0)
                 case (oppMvInd, "Y") => 2 + matchScores(oppMvInd + 1)
                 case (oppMvInd, "Z") => 3 + matchScores(oppMvInd + 2)
+                case _ => throw new IllegalArgumentException
             })
             .sum)
     }

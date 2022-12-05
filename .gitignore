@@ -1,4 +1,5 @@
 project/
 target/
-*/project/
-*/target/
+.bloop/
+.metals/
+.vscode/
