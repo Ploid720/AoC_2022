@@ -66,9 +66,9 @@ object Puzzle1
 
     // Ordinary recursion
 
-    // def calculateDirectorySizes(fileTree: Map[String, List[FSElem]]): Map[String, Int] =
+    // def calculateDirectorySizes(fileTree: Map[String, List[InElem]]): Map[String, Int] =
     // {
-    //     def calcSize(elems: List[FSElem], sizes: Map[String, Int], totalSize: Int = 0): Int =
+    //     def calcSize(elems: List[InElem], sizes: Map[String, Int], totalSize: Int = 0): Int =
     //     {
     //         elems match {
     //             case h :: t => h match {
