@@ -5,17 +5,19 @@ object Puzzle1
     def main(args: Array[String]): Unit =
     {
         @tailrec
-        def moveCrates(stack: Array[List[Char]], stepsLeft: Int, from: Int, to: Int): 
-            Array[List[Char]] =
+        def moveCrates(stacks: Map[Int, List[Char]],
+            stepsLeft: Int, from: Int, to: Int): 
+            Map[Int, List[Char]] =
         {
             if (stepsLeft < 1)
-                stack
+                stacks
             else
             {
-                val el = stack(from).head
-                stack(from) = stack(from).tail
-                stack(to) = el :: stack(to)
-                moveCrates(stack, stepsLeft - 1, from, to)
+                val el = stacks(from).head
+                moveCrates(stacks
+                    + (from -> stacks(from).tail)
+                    + (to -> (el :: stacks(to))),
+                    stepsLeft - 1, from, to)
             }
         }
 
@@ -37,7 +39,10 @@ object Puzzle1
             .sortBy(_.head._2)
             .map(_.sortBy(_._3))
             .map(_.map(_._1))
-            .toArray
+            .zipWithIndex
+            .map(_.swap)
+            .toMap
+
         println(input.drop(stackLines.size)
             .filter(s => !s.trim.isEmpty)
             .map(s => "[^\\d]+".r
@@ -49,7 +54,9 @@ object Puzzle1
                 case _ => throw new IllegalArgumentException
             })
             .foldLeft(stack)((st, m) => moveCrates(st, m._1, m._2, m._3))
-            .map(_.head)
+            .toList
+            .sortBy(_._1)
+            .map(_._2.head)
             .mkString)
     }
 }

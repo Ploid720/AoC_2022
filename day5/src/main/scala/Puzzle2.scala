@@ -4,35 +4,29 @@ object Puzzle2
 {
     def main(args: Array[String]): Unit =
     {
-        def moveCrates(stack: Array[List[Char]], stepsLeft: Int, from: Int, to: Int): 
-            Array[List[Char]] =
+        def moveCrates(stacks: Map[Int, List[Char]], stepsLeft: Int, from: Int, to: Int): 
+            Map[Int, List[Char]] =
         {
             @tailrec
-            def pickCrates(sta: Array[List[Char]], picked: List[Char], stLeft: Int):
-                (Array[List[Char]], List[Char]) =
+            def pickCrates(sta: Map[Int, List[Char]], picked: List[Char], stLeft: Int):
+                (Map[Int, List[Char]], List[Char]) =
             {
                 if (stLeft < 1)
                     (sta, picked)
                 else
-                {
-                    val el = stack(from).head
-                    stack(from) = stack(from).tail
-                    pickCrates(stack, el :: picked, stLeft - 1)
-                }
+                    pickCrates(sta + (from -> sta(from).tail),
+                        sta(from).head :: picked, stLeft - 1)
             }
             @tailrec
-            def dropCrates(stack: Array[List[Char]], picked: List[Char]):
-                Array[List[Char]] =
+            def dropCrates(sta: Map[Int, List[Char]], picked: List[Char]):
+                Map[Int, List[Char]] =
             {
                 if (picked.isEmpty)
-                    stack
+                    sta
                 else
-                {
-                    stack(to) = picked.head :: stack(to)
-                    dropCrates(stack, picked.tail)
-                }
+                    dropCrates(sta + (to -> (picked.head :: sta(to))), picked.tail)
             }
-            val (st, pi) = pickCrates(stack, List(), stepsLeft)
+            val (st, pi) = pickCrates(stacks, List(), stepsLeft)
             dropCrates(st, pi)
         }
 
@@ -54,7 +48,10 @@ object Puzzle2
             .sortBy(_.head._2)
             .map(_.sortBy(_._3))
             .map(_.map(_._1))
-            .toArray
+            .zipWithIndex
+            .map(_.swap)
+            .toMap
+        
         println(input.drop(stackLines.size)
             .filter(s => !s.trim.isEmpty)
             .map(s => "[^\\d]+".r
@@ -66,7 +63,9 @@ object Puzzle2
                 case _ => throw new IllegalArgumentException
             })
             .foldLeft(stack)((st, m) => moveCrates(st, m._1, m._2, m._3))
-            .map(_.head)
+            .toList
+            .sortBy(_._1)
+            .map(_._2.head)
             .mkString)
     }
 }
