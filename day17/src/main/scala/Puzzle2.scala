@@ -141,7 +141,7 @@ object Puzzle2
             .getLines
             .toList
             .flatMap(_.toList)
-        
+
         @tailrec
         def searchForMagicNumber(num: Int, state1: SimulationState, state2: SimulationState): Int =
         {
@@ -185,11 +185,11 @@ object Puzzle2
 
         val cRes = processRocks(prepareSimulationState(rockTypes, rockOrder, cycleLength,
             wind, width, leftMargin, bottomMargin, Set()))
-        val c1Res = processRocks(prepareSimulationState(rockTypes, rockOrder, 2 * cycleLength,
-            wind, width, leftMargin, bottomMargin, Set()))
-        val pRes = processRocks(prepareSimulationState(rockTypes, rockOrder, (2 * cycleLength) + partialCycleLength,
-            wind, width, leftMargin, bottomMargin, Set()))
-        
+        val c1Res = processRocks(cRes._3.copy(rockTotalCount = 2 * cycleLength))
+        val pRes = if (partialCycleLength > 0)
+            processRocks(c1Res._3.copy(rockTotalCount = 
+                (2 * cycleLength) + partialCycleLength)) else c1Res
+
         println((cycleCount - 2) * (c1Res._2 - cRes._2) + pRes._2)
     }
 }
