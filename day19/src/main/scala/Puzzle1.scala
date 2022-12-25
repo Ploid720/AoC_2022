@@ -9,8 +9,6 @@ object Puzzle1
     {
         val blueprintMap = blueprint.map(t => (t._1, t._2.toMap)).toMap
 
-        val geodeRobotObsidianCost = blueprintMap("geode")("obsidian")
-
         val maxResourceMap = blueprint
             .flatMap(_._2)
             .groupBy(_._1)
@@ -49,15 +47,7 @@ object Puzzle1
                                     .map(_._2)
                                     .getOrElse(0)
                                 
-                                val availableGeoRobotCount = blueprintMap("geode")
-                                            .filter(_._2 > 0)
-                                            .map(cd => resources.getOrElse(cd._1, 0) / cd._2)
-                                            .min
-
-                                val maxGeoGain = if (availableGeoRobotCount > 0)
-                                    ((timeLeft - 1) * timeLeft / 2) else 
-                                        ((timeLeft - 2) * (timeLeft - 1) / 2)
-
+                                val maxGeoGain = (timeLeft - 1) * timeLeft / 2
                                 val maxGeo = (timeLeft * robots.getOrElse("geode", 0)) + maxGeoGain
                                 if ((scoreDiff >= maxGeo)
                                     || robots.exists(r => (r._1 != "geode") 
